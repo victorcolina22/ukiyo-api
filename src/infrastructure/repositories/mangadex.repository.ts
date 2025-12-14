@@ -3,6 +3,7 @@ import {
   CHAPTER_DATA_URL,
   CHAPTER_IMAGES_URL,
   ENDPOINTS,
+  LANGUAGE,
 } from '@/shared/constants';
 import { generateMangaStructure } from '@/shared/functions';
 import { Feed } from '@/shared/interfaces/feed';
@@ -15,7 +16,7 @@ import { MangadexResponse } from '@/shared/interfaces/mangadex';
 
 export class MangadexRepository implements MangaRepository {
   async getMangaList(): Promise<MangaStructure[]> {
-    const mangadexUrl = `${BASE_URL}${ENDPOINTS.MANGA_LIST}?includes[]=cover_art&availableTranslatedLanguage[]=es`;
+    const mangadexUrl = `${BASE_URL}${ENDPOINTS.MANGA_LIST}?includes[]=cover_art&availableTranslatedLanguage[]=${LANGUAGE}`;
 
     try {
       const mangadexResponse = await fetch(mangadexUrl);
@@ -28,9 +29,10 @@ export class MangadexRepository implements MangaRepository {
     }
   }
 
+  // TODO: Filter chapters by english language
   async getMangaById(id: string): Promise<MangaStructure> {
     const mangadexRequest = fetch(
-      `${BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author&translatedLanguage[]=es`,
+      `${BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author&availableTranslatedLanguage[]=${LANGUAGE}`,
     ).then((response) => response.json());
     const mangadexFeedRequest = fetch(`${BASE_URL}/manga/${id}/feed`).then(
       (response) => response.json(),
