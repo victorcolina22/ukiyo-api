@@ -23,7 +23,7 @@ function setMangaStructure(manga: MangadexData): MangaStructure {
 
   const structure = {
     id,
-    title: attributes.title.en,
+    title: attributes.title.en || attributes.title['ja-ro'],
     description: attributes.description.en ?? '',
     status: attributes.status,
     year: attributes.year,

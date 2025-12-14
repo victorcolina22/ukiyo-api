@@ -130,6 +130,7 @@ export enum Group {
 
 export interface Title {
   en: string;
+  'ja-ro': string;
 }
 
 export enum TagType {

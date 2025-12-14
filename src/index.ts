@@ -1,19 +1,15 @@
 import 'dotenv/config';
-import express from 'express';
-import cors from 'cors';
+import { AppRoutes } from './presentation/routes';
+import { Server } from './presentation/server';
 
-// Routes
-import routes from './routes';
+(async () => {
+  main();
+})();
 
-const PORT = 3000;
-
-const app = express();
-
-app.use(express.json());
-app.use(cors());
-
-app.use('/api', routes);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+function main() {
+  const server = new Server({
+    port: 3030,
+    routes: AppRoutes.routes,
+  });
+  server.start();
+}
