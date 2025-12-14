@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   BASE_URL,
   CHAPTER_DATA_URL,
@@ -19,8 +20,8 @@ export class MangadexRepository implements MangaRepository {
     const mangadexUrl = `${BASE_URL}${ENDPOINTS.MANGA_LIST}?includes[]=cover_art&availableTranslatedLanguage[]=${LANGUAGE}`;
 
     try {
-      const mangadexResponse = await fetch(mangadexUrl);
-      const mangadexData: MangadexResponse = await mangadexResponse.json();
+      const mangadexResponse = await axios.get<MangadexResponse>(mangadexUrl);
+      const mangadexData = mangadexResponse.data;
 
       return generateMangaStructure(mangadexData.data) as MangaStructure[];
     } catch (error) {
@@ -31,12 +32,10 @@ export class MangadexRepository implements MangaRepository {
 
   // TODO: Filter chapters by english language
   async getMangaById(id: string): Promise<MangaStructure> {
-    const mangadexRequest = fetch(
+    const mangadexRequest = axios.get(
       `${BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author&availableTranslatedLanguage[]=${LANGUAGE}`,
-    ).then((response) => response.json());
-    const mangadexFeedRequest = fetch(`${BASE_URL}/manga/${id}/feed`).then(
-      (response) => response.json(),
     );
+    const mangadexFeedRequest = axios.get(`${BASE_URL}/manga/${id}/feed`);
 
     try {
       const [mangadexReponse, mangadexFeedResponse] = await Promise.all([
@@ -45,10 +44,10 @@ export class MangadexRepository implements MangaRepository {
       ]);
 
       const mangadexStructure = generateMangaStructure(
-        mangadexReponse.data,
+        mangadexReponse.data.data,
       ) as MangaStructure;
 
-      mangadexStructure.chapters = mangadexFeedResponse.data
+      mangadexStructure.chapters = mangadexFeedResponse.data.data
         .map((chapter: Feed) => ({
           id: chapter.id,
           chapter: chapter.attributes.chapter,
@@ -66,8 +65,10 @@ export class MangadexRepository implements MangaRepository {
 
   async getChapterImages(chapterId: string): Promise<ChapterImage[]> {
     try {
-      const chapterResponse = await fetch(`${CHAPTER_IMAGES_URL}/${chapterId}`);
-      const chapterData = await chapterResponse.json();
+      const chapterResponse = await axios.get(
+        `${CHAPTER_IMAGES_URL}/${chapterId}`,
+      );
+      const chapterData = chapterResponse.data;
 
       return chapterData.chapter.data.map((item: string) => ({
         chapterImageUrl: `${CHAPTER_DATA_URL}/${chapterData.chapter.hash}/${item}`,

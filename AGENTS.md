@@ -38,6 +38,14 @@
 - Constants in `shared/constants.ts` using UPPER_SNAKE_CASE
 - Interfaces in `shared/interfaces/` with descriptive names
 
+### HTTP Client
+
+- Use **axios** for all HTTP requests in the infrastructure layer
+- Import axios at the top of repository files: `import axios from 'axios';`
+- Use typed axios requests: `axios.get<ResponseType>(url)`
+- Access response data via `response.data` property
+- Handle axios errors in try/catch blocks with proper error logging
+
 ### Error Handling
 
 - Use try/catch blocks with console.log for debugging
