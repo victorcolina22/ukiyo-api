@@ -5,6 +5,7 @@ import {
   CHAPTER_IMAGES_URL,
   ENDPOINTS,
   LANGUAGE,
+  SAFE_CONTENT_RATINGS,
 } from '@/shared/constants';
 import { generateMangaStructure } from '@/shared/functions';
 import { Feed } from '@/shared/interfaces/feed';
@@ -17,10 +18,17 @@ import { MangadexResponse } from '@/shared/interfaces/mangadex';
 
 export class MangadexRepository implements MangaRepository {
   async getMangaList(): Promise<MangaStructure[]> {
-    const mangadexUrl = `${BASE_URL}${ENDPOINTS.MANGA_LIST}?includes[]=cover_art&availableTranslatedLanguage[]=${LANGUAGE}`;
+    const params: Record<string, unknown> = {
+      'includes[]': 'cover_art',
+      'availableTranslatedLanguage[]': LANGUAGE,
+      'contentRating[]': SAFE_CONTENT_RATINGS,
+    };
 
     try {
-      const mangadexResponse = await axios.get<MangadexResponse>(mangadexUrl);
+      const mangadexResponse = await axios.get<MangadexResponse>(
+        `${BASE_URL}${ENDPOINTS.MANGA_LIST}`,
+        { params },
+      );
       const mangadexData = mangadexResponse.data;
 
       return generateMangaStructure(mangadexData.data) as MangaStructure[];
@@ -30,12 +38,22 @@ export class MangadexRepository implements MangaRepository {
     }
   }
 
-  // TODO: Filter chapters by english language
   async getMangaById(id: string): Promise<MangaStructure> {
-    const mangadexRequest = axios.get(
-      `${BASE_URL}/manga/${id}?includes[]=cover_art&includes[]=author&availableTranslatedLanguage[]=${LANGUAGE}`,
-    );
-    const mangadexFeedRequest = axios.get(`${BASE_URL}/manga/${id}/feed`);
+    const mangaParams = {
+      'includes[]': ['cover_art', 'author'],
+      'availableTranslatedLanguage[]': LANGUAGE,
+    };
+    const mangadexRequest = axios.get(`${BASE_URL}/manga/${id}`, {
+      params: mangaParams,
+    });
+
+    const feedParams = {
+      'translatedLanguage[]': LANGUAGE,
+      'order[chapter]': 'asc',
+    };
+    const mangadexFeedRequest = axios.get(`${BASE_URL}/manga/${id}/feed`, {
+      params: feedParams,
+    });
 
     try {
       const [mangadexReponse, mangadexFeedResponse] = await Promise.all([

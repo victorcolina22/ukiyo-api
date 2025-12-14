@@ -5,6 +5,8 @@ export const COVERS_URL = process.env.MANGADEX_COVERS_URL;
 export const LANGUAGE = process.env.MANGADEX_LANGUAGE;
 export const UPLOADS_URL = process.env.MANGADEX_UPLOADS_URL;
 
+export const SAFE_CONTENT_RATINGS = ['safe', 'suggestive'];
+
 export const ENDPOINTS = {
   MANGA_LIST: '/manga',
 };

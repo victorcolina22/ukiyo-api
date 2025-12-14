@@ -16,7 +16,7 @@ export class MangaController {
     this.getChapterImagesUseCase = new GetChapterImagesUseCase(mangaRepository);
   }
 
-  public mangaList = async (_req: Request, res: Response) => {
+  public mangaList = async (req: Request, res: Response) => {
     try {
       const mangaStructure = await this.getMangaListUseCase.execute();
       res.status(200).json(mangaStructure);
