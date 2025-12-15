@@ -60,3 +60,14 @@
 - Constants: UPPER_SNAKE_CASE for environment/config values
 - Use-cases: PascalCase with `.use-case.ts` suffix (e.g., `GetMangaListUseCase`)
 - Repositories: PascalCase with `.repository.ts` suffix (e.g., `MangadexRepository`)
+
+## API Endpoints
+
+- `GET /` - Returns manga list (limited to 50 results)
+- `GET /:id` - Returns manga by ID
+- `GET /search/:title` - Search manga by title
+- `GET /chapter/:id` - Returns chapter images by chapter ID
+
+## Recent Changes
+
+- **feat: add manga search by title endpoint** - Implemented search functionality with new use case, repository method, controller endpoint, and route
