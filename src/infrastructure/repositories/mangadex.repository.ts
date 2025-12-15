@@ -22,6 +22,7 @@ export class MangadexRepository implements MangaRepository {
       'includes[]': 'cover_art',
       'availableTranslatedLanguage[]': LANGUAGE,
       'contentRating[]': SAFE_CONTENT_RATINGS,
+      limit: 50,
     };
 
     try {
@@ -79,6 +80,19 @@ export class MangadexRepository implements MangaRepository {
       console.log(error);
       throw new Error('Error fetching mangadex data');
     }
+  }
+
+  async getMangaByTitle(title: string): Promise<MangaStructure> {
+    const params: Record<string, unknown> = {
+      'includes[]': 'cover_art',
+      'availableTranslatedLanguage[]': LANGUAGE,
+      'contentRating[]': SAFE_CONTENT_RATINGS,
+      title,
+    };
+    const mangadexRequest = await axios.get(`${BASE_URL}/manga`, {
+      params,
+    });
+    return generateMangaStructure(mangadexRequest.data.data) as MangaStructure;
   }
 
   async getChapterImages(chapterId: string): Promise<ChapterImage[]> {

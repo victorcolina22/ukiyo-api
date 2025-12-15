@@ -8,6 +8,7 @@ export class MangaRoutes {
 
     router.get('/', mangaController.mangaList);
     router.get('/:id', mangaController.mangaById);
+    router.get('/search/:title', mangaController.mangaByTitle);
     router.get('/chapter/:id', mangaController.imagesByChapterId);
 
     return router;
