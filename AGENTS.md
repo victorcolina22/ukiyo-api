@@ -1,5 +1,14 @@
 # AGENTS.md
 
+Project: ukiyo-api - Manga API server built with Express and TypeScript
+
+## Quick Start
+
+```bash
+pnpm install
+pnpm run start:dev
+```
+
 ## Commands
 
 - **Build**: `pnpm run build` - Compiles TypeScript to dist/
@@ -7,6 +16,18 @@
 - **Production**: `pnpm run start` - Builds and runs from dist/
 - **Lint**: `npx eslint .` - Run ESLint on all files
 - **Format**: `npx prettier --write .` - Format all files
+
+## Code Quality
+
+Always run lint and format before committing:
+
+```bash
+npx eslint . && npx prettier --write .
+```
+
+## Testing
+
+No automated tests currently. Test endpoints manually using curl or Postman after making changes.
 
 ## Code Style Guidelines
 
@@ -71,3 +92,13 @@
 ## Recent Changes
 
 - **feat: add manga search by title endpoint** - Implemented search functionality with new use case, repository method, controller endpoint, and route
+
+## Detailed Documentation
+
+See the `/docs` folder for detailed documentation:
+
+- `docs/commands.md` - Detailed commands reference
+- `docs/architecture.md` - Architecture patterns and folder structure
+- `docs/code-style.md` - Complete code style guidelines
+- `docs/api.md` - API endpoints reference
+- `docs/CONTRIBUTING.md` - Contribution guidelines
